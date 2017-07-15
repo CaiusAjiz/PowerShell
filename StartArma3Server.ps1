@@ -49,7 +49,7 @@ $ServerCFG =
 
 
 ##### Modlist #####
-<#Mods should be their ID, see below example. seperate with semicolon ;
+<#Mods should be their ID, see below example. seperate with a comma like this '123456789','123456789'
 #CBA_A3 http://steamcommunity.com/sharedfiles/filedetails/?id=450814997&searchtext=cba would be '450814997' #>
 $Mods = 
 
