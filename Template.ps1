@@ -1,17 +1,15 @@
 ﻿<#
 .SYNOPSIS 
-    
+   
 
-.DESCRIPTION
-    
+.PARAMETER 
 
-.PARAMETER <Parameter name>
-    
 
 .EXAMPLE
     
 
 .NOTES
     AUTHOR: Caius Ajiz
-    LASTEDIT: [DATE in DD/MM/YYYY]
+    WEBSITE: https://github.com/CaiusAjiz/Arma3Powershell/
+    
 #> 
