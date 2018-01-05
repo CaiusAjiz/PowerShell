@@ -24,10 +24,13 @@
 
 .PARAMETER mods
 
-    An array of mods to download for Arma3 Server.
+    An array of mods to download for Arma3 Server. seperate like: 'mod','mod2','mod3'
+    MUST use the Steam ID. For example to install CBA_A3, it would be 450814997. Taken from https://steamcommunity.com/sharedfiles/filedetails/?id=450814997
 
 .EXAMPLE
     
+    Install Arma3 Server into C:\SteamCMD with 3 mods (CBA_A3, ShacktacUI & ASR AI3)
+    Setup-Arma3Server -SteamCMDinstallPath "C:\SteamCMD" -Arma3ServerName 'Arma3Live' -SteamUsername [Username] -SteamPassword [Password] -mods '450814997','498740884','642457233'
 
 .NOTES
     AUTHOR: Caius Ajiz
@@ -83,14 +86,16 @@ If( (Test-Path($Arma3InstallLocation +"\arma3server.exe")) -eq $false ){
     }else{
     Write-Output "Arma3 Server already exists in $Arma3InstallLocation, moving on to Server Config file"
     }
-#2.1 Copying across the server config file, if one has been provided
-If( (Test-Path $ServerConfigFileLocation).length -gt 0 ){
-    write-output "Copying Server Configuration file from $ServerConfigFileLocation to $Arma3InstallLocation"
-    Copy-Item -Path $ServerConfigFileLocation -Destination $Arma3InstallLocation -Force
-    }else{Write-Output "No Server config provided or the file couldn't be found, moving on to installing the mods"}
+#3 if the var exists, copying across the server config file, if one has been provided
+if ($ServerConfigFileLocation.length -gt '1'){
+    If (Test-Path $ServerConfigFileLocation){
+        write-output "Copying Server Configuration file from $ServerConfigFileLocation to $Arma3InstallLocation"
+        Copy-Item -Path $ServerConfigFileLocation -Destination $Arma3InstallLocation -Force
+        }else{Write-Output "Server Config file couldn't be found, moving on to installing the mods"}
+    }else {Write-Output "No Server config provided, moving on to installing the mods "}
 
-#3 - Installing the mods, if there are any provided
-if($mods.length -gt 0 ){
+#4 - Installing the mods, if there are any provided
+if ($mods.length -gt 0 ){
     #building the needed vars
     $ModArrayToLoad = $null
     $WorkShopPath = $SteamCMDinstallPath + '\steamapps\workshop\content\107410'
@@ -113,42 +118,8 @@ if($mods.length -gt 0 ){
         }
     #removing the final ; from the modlist to allow ARMA to load mods properly (To be used when installing the service).
     $mods = $ModArrayToLoad.Substring(0,$ModArrayToLoad.Length-1)
-}else{ Write-Output "No Mods provided, moving on to Installing Arma3 as a Windows service"}
+}else{}
 
-#4 - downloading NSSM and Installing Arma3 Server as a service. Checks to see if Service with same name already exists.
-$Arma3ServiceCheck = Get-Service -Name $Arma3ServerName -ErrorAction SilentlyContinue
-$BinaryPathNameString = $null
-$OS64BitCheck = [environment]::Is64BitOperatingSystem
-
-#Making sure service doesn't already exist, then doing if statements to build the string to pass to -binaryPathName in the New Service CMDlet
-if( $Arma3ServiceCheck.length -eq 0 ){
-    #downloading NSSM into the SteamCMD folders
-    Start-BitsTransfer -Source $NSSMDownloadURL -Destination $SteamCMDinstallPath
-    Start-Sleep -Seconds 5
-    #extracting into a new folder inside of the SteamCMD structure.
-    Expand-Archive -Path ($SteamCMDinstallPath + "\nssm-2.24.zip") -DestinationPath ($SteamCMDinstallPath + "\NSSM" )
-
-    <#
-
-    #64-32 bit OS check
-    if($OS64BitCheck -eq $true){ 
-        $BinaryPathNameString = $BinaryPathNameString + "$Arma3InstallLocation\arma3server_x64.exe"
-    }else{
-        $BinaryPathNameString = $BinaryPathNameString + "$Arma3InstallLocation\arma3server.exe"
-        }
-    #Checking if server config file location has been provided. if not, server service will be created without one
-    if($ServerConfigFileLocation.Length -gt 0){
-        #Getting File Name
-        $configFileName = $ServerConfigFileLocation.Split('\')
-        $configFileName = $configFileName[($configFileName.Count - 1)]
-        #Adding file name to Var to pass
-        $BinaryPathNameString = $BinaryPathNameString + " -config=$configFileName"
-    }else{}
-    #If there are mods, add them to the string by taking advantage of the Array built at the end of #3 - installing the mods. If not, skip
-    if($ModArrayToLoad.Length -gt 0 ){
-        $BinaryPathNameString = $BinaryPathNameString + "$ModArrayToLoad"
-    }else{}
-}else{
-    Write-Output "Service already exists!"
-}  
-#>
+#4
+Write-Output "Arma3 server `"$Arma3ServerName`" has been installed in $SteamCMDinstallPath"
+Write-Output "mods downloaded were: $mods"
