@@ -4,7 +4,7 @@
 
 .PARAMETER SteamCMDinstallPath
 
-    The location of SteamCMD. If not downloaded, SteamCMD will be downloaded to this location.
+    The location of SteamCMD. If not already there, SteamCMD will be downloaded to this location.
 
 .PARAMETER Arma3ServerName
 
@@ -58,6 +58,7 @@ $SteamCMDDownloadURL = 'https://steamcdn-a.akamaihd.net/client/installer/steamcm
 $Arma3ServerID = '233780'
 $Arma3ID = '107410'
 $NSSMDownloadURL = 'https://nssm.cc/release/nssm-2.24.zip'
+$CredentialFile = 'ServerLogin.cred'
 ####/vars####
 
 #1 - Checking and downloading SteamCMD if doesn't already exist.
@@ -120,6 +121,16 @@ if ($mods.length -gt 0 ){
     $mods = $ModArrayToLoad.Substring(0,$ModArrayToLoad.Length-1)
 }else{}
 
-#4
+#5 Making secure strings to pass to file in SteamCMD location to allow logging on of service later with later CMDlets 
+#Converting password to securestring so it's not in plain text. Can only be decrypted by the user that generated it on the computer that generated it.
+$PasswordSecureString = $SteamPassword | ConvertTo-SecureString -AsPlainText -Force
+$CredentialHash = @{
+        'Username' = $SteamUsername
+        'Password' = $PasswordSecureString
+}
+$CredentialHash | Export-Clixml -Path "$SteamCMDinstallPath\$CredentialFile" -Force
+
+
 Write-Output "Arma3 server `"$Arma3ServerName`" has been installed in $SteamCMDinstallPath"
-Write-Output "mods downloaded were: $mods"
+Write-Output "NOTE: the credentials you have provided have been encrypted and placed into $SteamCMDinstallPath\$CredentialFile. Only the user:`"$env:USERNAME`" on this computer can decrypt these values. This file is used by other Arma3Powershell CMDlets."
+if ($mods.length -gt 0 ){Write-Output "mods downloaded were: $mods"}else{}
