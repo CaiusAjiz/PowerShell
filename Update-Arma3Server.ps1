@@ -1,5 +1,5 @@
 ﻿<#
-.SYNOPSIS 
+.SYNOPSIS
     A POSH script to update an arma3 server that's been created with Setup-Arma3Server.ps1
 
 .PARAMETER SteamCMDinstallPath
@@ -11,17 +11,17 @@
     Name of the Arma3 server.
 
 .PARAMETER ServerConfigFileLocation
-    
+
     The name of the config file for the server, if you use one. Should ideally be in the Arma 3 Server directory.
 
 .PARAMETER ModsToUpdate
-    
+
     A list of mods to update, using their steam numbers in the format of: "000000","000001","00125"
 
 .NOTES
     AUTHOR: Caius Ajiz
     WEBSITE: https://github.com/CaiusAjiz/Arma3Powershell/
-#> 
+#>
 
 Param(
     [Parameter(Mandatory=$true)]
@@ -36,7 +36,7 @@ Param(
 #App ID is 233780 for Arma3 Server
 $AppID = '233780'
 $Arma3Id = '107410'
-$WorkShopPath = $SteamCMDinstallPath + '\steamapps\workshop\content\107410\'
+$WorkShopPath = $SteamCMDinstallPath + '\steamapps\workshop\content\107410'
 $CredentialFile = 'ServerLogin.cred'
 $OriginalLocation = Get-Location
 $AppInstallDir = $SteamCMDinstallPath + "\" + $Arma3ServerName
@@ -52,14 +52,14 @@ $UserName = $CredentialHash.Username
 $Password = (New-Object System.Management.Automation.PSCredential -ArgumentList $CredentialHash.Username,$CredentialHash.Password).GetNetworkCredential().Password
 
 #Updates Arma3 server and validates files
-If($SteamCMDCheck -eq "True"){ 
-        .\SteamCMD.exe +login $UserName $Password +force_install_dir $AppInstallDir +app_update $AppID validate +quit                
+If($SteamCMDCheck -eq "True"){
+        .\SteamCMD.exe +login $UserName $Password +force_install_dir $AppInstallDir +app_update $AppID validate +quit
     }else{
         throw "SteamCMD doesn't exist in $SteamCmdDir, exiting"
          }
 #Installs mods to C:\steamcmd\steamapps\workshop\content\107410. can't be changed. Then makes a link in the correct area so it can be called later.
 Foreach ($Mod in $ModsToUpdate){
-    #Mod DL from workshop 
+    #Mod DL from workshop
     .\SteamCMD.exe +login $UserName $Password +workshop_download_item $Arma3Id $Mod validate +quit
 
     #copy folders as creating shortcuts doesn't work
