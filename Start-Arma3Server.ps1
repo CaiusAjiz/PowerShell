@@ -36,14 +36,13 @@ Param(
 
 ##### Variables #####
 #App ID is 233780 for Arma3 Server
-$AppID = '233780'
 $AppInstallDir = $SteamCMDinstallPath + "\" + $Arma3ServerName
 $originalLocation = Get-Location
 ##### /Variables #####
 
 #Check SteamCMD exists.
 Set-Location -Path $SteamCMDinstallPath
-$SteamCMDCheck = Test-Path -Path ".\Steamcmd.exe"
+Test-Path -Path ".\Steamcmd.exe"
 
 #removing the final ; from the modlist to allow ARMA to load mods properly.
 foreach($mod in $Mods){

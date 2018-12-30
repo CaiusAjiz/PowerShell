@@ -57,7 +57,6 @@ Param
 $SteamCMDDownloadURL = 'https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip'
 $Arma3ServerID = '233780'
 $Arma3ID = '107410'
-$NSSMDownloadURL = 'https://nssm.cc/release/nssm-2.24.zip'
 $CredentialFile = 'ServerLogin.cred'
 ####/vars####
 
