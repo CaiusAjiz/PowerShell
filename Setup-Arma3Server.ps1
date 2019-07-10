@@ -25,7 +25,7 @@
 .PARAMETER mods
 
     An array of mods to download for Arma3 Server. seperate like: 'mod','mod2','mod3'
-    MUST use the Steam ID. For example to install CBA_A3, it would be 450814997. Taken from https://steamcommunity.com/sharedfiles/filedetails/?id=450814997
+    must use the Steam ID. For example to install CBA_A3, it would be 450814997. Taken from https://steamcommunity.com/sharedfiles/filedetails/?id=450814997
 
 .EXAMPLE
     

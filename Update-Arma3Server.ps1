@@ -36,7 +36,7 @@ Param(
 #App ID is 233780 for Arma3 Server
 $AppID = '233780'
 $Arma3Id = '107410'
-$WorkShopPath = $SteamCMDinstallPath + '\steamapps\workshop\content\107410'
+$WorkShopPath = $SteamCMDinstallPath + '\steamapps\workshop\content\107410\'
 $CredentialFile = 'ServerLogin.cred'
 $OriginalLocation = Get-Location
 $AppInstallDir = $SteamCMDinstallPath + "\" + $Arma3ServerName
@@ -57,15 +57,15 @@ If($SteamCMDCheck -eq "True"){
     }else{
         throw "SteamCMD doesn't exist in $SteamCmdDir, exiting"
          }
-#Installs mods to C:\steamcmd\steamapps\workshop\content\107410. can't be changed. Then makes a link in the correct area so it can be called later.
+#Installs mods to .\steamcmd\steamapps\workshop\content\107410. can't be changed. Then makes a link in the correct area so it can be called later.
 Foreach ($Mod in $ModsToUpdate){
     #Mod DL from workshop
     .\SteamCMD.exe +login $UserName $Password +workshop_download_item $Arma3Id $Mod validate +quit
 
     #copy folders as creating shortcuts doesn't work
     $source = $WorkShopPath + "$Mod"
-    $destination = $AppInstallDir + "\" + "$Mod"
-    $destinationKeyFolder = $AppInstallDir + "keys"
+    $destination = $AppInstallDir
+    $destinationKeyFolder = $AppInstallDir + "\keys"
     #Copy whole Folder to the install Dir, which is required to load. Arma expects the folders to be in one area.
     Copy-Item -Path $source -Destination $destination -Recurse -Force -Verbose
     #Copy the bikeys to the Servers keys folder because nothing's ever easy.
