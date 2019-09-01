@@ -23,6 +23,7 @@
     WEBSITE: https://github.com/CaiusAjiz/Arma3Powershell/
 #>
 
+function Update-Arma3Server {
 Param(
     [Parameter(Mandatory=$true)]
     [String]$SteamCMDinstallPath,
@@ -73,3 +74,7 @@ Foreach ($Mod in $ModsToUpdate){
 }
 
 Set-Location $OriginalLocation
+
+}
+
+Export-ModuleMember -Function Update-Arma3Server

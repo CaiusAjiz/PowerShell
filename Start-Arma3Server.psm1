@@ -22,7 +22,7 @@
     AUTHOR: Caius Ajiz
     WEBSITE: https://github.com/CaiusAjiz/Arma3Powershell/
 #> 
-
+function Start-Arma3Server {
 Param(
     [Parameter(Mandatory=$true)]
     [String]$SteamCMDinstallPath,
@@ -56,3 +56,7 @@ Set-Location $AppInstallDir
 
 #set back to original location
 Set-Location $originalLocation
+
+}
+
+Export-ModuleMember -Function Start-Arma3Server

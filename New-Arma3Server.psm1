@@ -38,6 +38,7 @@
     
 #> 
 
+function New-Arma3Server {
 Param
 (
     [Parameter(Mandatory=$true)]
@@ -133,3 +134,7 @@ $CredentialHash | Export-Clixml -Path "$SteamCMDinstallPath\$CredentialFile" -Fo
 Write-Output "Arma3 server `"$Arma3ServerName`" has been installed in $SteamCMDinstallPath"
 Write-Output "NOTE: the credentials you have provided have been encrypted and placed into $SteamCMDinstallPath\$CredentialFile. Only the user:`"$env:USERNAME`" on this computer can decrypt these values. This file is used by other Arma3Powershell CMDlets."
 if ($mods.length -gt 0 ){Write-Output "mods downloaded were: $mods"}else{}
+
+}
+
+Export-ModuleMember -Function New-Arma3Server
